@@ -1,0 +1,25 @@
+{
+  "name": "place2-stream-stuff",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "opl",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@types/node": "^17.0.23",
+    "amqplib": "^0.8.0",
+    "ingester": "file:../live-data-processing/ingester",
+    "jimp": "^0.16.1",
+    "node-fetch": "^2.6.7",
+    "typescript": "~4.6.3",
+    "ws": "^8.5.0"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.6.1",
+    "@types/ws": "^8.5.3",
+    "ts-node": "^10.7.0"
+  }
+}
