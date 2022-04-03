@@ -99,10 +99,25 @@ export interface DiffFrameData {
 				return null;
 			}
 
-			// Subscription 3 contains links to the full frames. Download them only every 10 seconds.
-			if (json.id !== '2' && json.id !== '4') {
-				if ((json.id === '3' || json.id === '5') && typeName === 'FullFrameMessageData' && (lastFullFrameTimestamp[json.id] ?? 0) + 10000 < json.payload.data.subscribe.data.timestamp) {
-					lastFullFrameTimestamp[json.id] = json.payload.data.subscribe.data.timestamp;
+			let subscriptionId = json.id;
+
+			// Backwards compat
+			if (subscriptionId === '2') subscriptionId = 'd0';
+			else if (subscriptionId === '3') subscriptionId = 'f0';
+			else if (subscriptionId === '4') subscriptionId = 'd1';
+			else if (subscriptionId === '5') subscriptionId = 'f1';
+
+			const match = /^([df])(\d+)$/.exec(subscriptionId);
+			if (match === null) throw new Error(`Unknown subscription id: ${subscriptionId}`);
+
+			const fullFrameSubscription = match[1] === 'f';
+			const canvasId = parseInt(match[2]);
+
+			// Download full frames only every 10 seconds.
+			// Full frames from DiffFrameMessageData subcriptions should always be downloaded (first frame of the stream - need it to know initial state).
+			if (fullFrameSubscription) {
+				if (typeName === 'FullFrameMessageData' && (lastFullFrameTimestamp[canvasId] ?? 0) + 10000 < json.payload.data.subscribe.data.timestamp) {
+					lastFullFrameTimestamp[canvasId] = json.payload.data.subscribe.data.timestamp;
 					// pass
 				} else {
 					return null;
@@ -131,8 +146,6 @@ export interface DiffFrameData {
 
 				throw ex;
 			}
-
-			const canvasId = json.id === '2' || json.id === '4' ? '0' : '1';
 
 			if (typeName === 'FullFrameMessageData') {
 				return {
