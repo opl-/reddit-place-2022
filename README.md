@@ -15,3 +15,9 @@
 - `canvaspng` from a little later label canvases based on their subscription id: `2` for canvas 0 diffs, `3` for canvas 0 full, `4` for canvas 1 diffs, and `5` for canvas 1 full.
 - `pixelws` were tests to see if it's possible to subscribe to pixel changes directly. It's not.
 - `vscode-server` decided to just stop working and kill all terminals while i was asleep on day three. fucking lovely, thanks.
+
+
+# Dependencies
+
+- RabbitMQ for communication between the components. Example command to start it with Docker is in `docker/start-rabbit.sh`.
+- `ingester` for piping data around. Can be found at <https://github.com/opl-/live-data-processing>.
